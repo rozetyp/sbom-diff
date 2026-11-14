@@ -1,0 +1,108 @@
+{
+  "_about": "Ground truth for SBOM Diff. Written by hand from the SBOM contents in test/fixtures/, not generated from the app. test/core.test.mjs checks every scenario. Policies list the violating components as name@version (empty list = PASS). Changed entries read 'name from → to (fields)'.",
+  "scenarios": [
+    {
+      "id": "single_cdx_pass",
+      "description": "Permissive-only CycloneDX SBOM passes every preset.",
+      "file": "cdx-pass.json",
+      "count": 3,
+      "policies": { "No GPL": [], "No AGPL": [], "No Copyleft": [], "No SSPL": [], "Permissive Only": [] }
+    },
+    {
+      "id": "single_cdx_fail",
+      "description": "One component per problem license. 'No GPL' covers AGPL too; 'Permissive Only' covers SSPL.",
+      "file": "cdx-fail.json",
+      "count": 5,
+      "policies": {
+        "No GPL": ["agpl-lib@1.2.0", "gpl-lib@3.0.0"],
+        "No AGPL": ["agpl-lib@1.2.0"],
+        "No Copyleft": ["agpl-lib@1.2.0", "gpl-lib@3.0.0", "lgpl-lib@2.1.0"],
+        "No SSPL": ["sspl-lib@1.0.0"],
+        "Permissive Only": ["agpl-lib@1.2.0", "gpl-lib@3.0.0", "lgpl-lib@2.1.0", "sspl-lib@1.0.0"]
+      }
+    },
+    {
+      "id": "single_cdx_missing_fields",
+      "description": "Components without version or license load; unknown licenses never count as violations.",
+      "file": "cdx-missing.json",
+      "count": 2,
+      "unknownLicenses": 2,
+      "policies": { "No GPL": [], "Permissive Only": [] }
+    },
+    {
+      "id": "single_cdx_expression_field",
+      "description": "A CycloneDX license expression is parsed: GPL-3.0-only WITH an exception is still GPL.",
+      "file": "cdx-expression.json",
+      "count": 1,
+      "policies": { "No GPL": ["exprlib@1.0.0"], "No AGPL": [], "Permissive Only": ["exprlib@1.0.0"] }
+    },
+    {
+      "id": "single_cdx_duplicates",
+      "description": "Two versions of one package are two components; an exact duplicate would be one.",
+      "file": "cdx-dupes.json",
+      "count": 3
+    },
+    {
+      "id": "single_cdx_nested",
+      "description": "Nested CycloneDX components are included.",
+      "file": "cdx-nested.json",
+      "count": 3,
+      "policies": { "No GPL": ["bundled-gpl@1.0.0"] }
+    },
+    {
+      "id": "single_cdx_dual_license",
+      "description": "OR means a choice (MIT OR GPL passes No GPL), AND means both apply, GPL-2.0+ is GPL, operators are case-insensitive.",
+      "file": "cdx-dual-license.json",
+      "count": 7,
+      "policies": {
+        "No GPL": ["both-required@1.0.0", "gpl-plus@1.0.0"],
+        "No Copyleft": ["both-required@1.0.0", "gpl-plus@1.0.0", "lgpl-only@1.0.0"],
+        "Permissive Only": ["both-required@1.0.0", "cc-by-sa@1.0.0", "gpl-plus@1.0.0", "lgpl-only@1.0.0"]
+      }
+    },
+    {
+      "id": "diff_cdx_a_b",
+      "description": "Basic CycloneDX diff with one added, one removed, one version change.",
+      "a": "cdx-a.json",
+      "b": "cdx-b.json",
+      "counts": [3, 3],
+      "added": ["delta@0.9.0"],
+      "removed": ["bravo@1.0.0"],
+      "changed": ["alpha 1.0.0 → 2.0.0 (version)"]
+    },
+    {
+      "id": "cross_format_cdx_to_spdx",
+      "description": "CycloneDX vs SPDX: components match across formats even though only one side has purls.",
+      "a": "cdx-a.json",
+      "b": "spdx-b.json",
+      "counts": [3, 3],
+      "added": ["echo@1.0.0"],
+      "removed": ["bravo@1.0.0"],
+      "changed": ["alpha 1.0.0 → 2.1.0 (version)"]
+    },
+    {
+      "id": "diff_large_lists",
+      "description": "81 vs 82 components; the UI truncates lists at 50 but Export JSON has everything.",
+      "a": "cdx-large-a.json",
+      "b": "cdx-large-b.json",
+      "counts": [81, 82],
+      "added": ["new-one@0.1.0"],
+      "removed": [],
+      "changed": []
+    },
+    {
+      "id": "diff_multiple_versions",
+      "description": "A ships lodash 4.17.20 and 4.17.21; B only 4.17.21. The old version is removed, nothing is silently dropped.",
+      "a": "cdx-multiversion-a.json",
+      "b": "cdx-multiversion-b.json",
+      "counts": [3, 3],
+      "added": ["minimist@1.2.8"],
+      "removed": ["lodash@4.17.20"],
+      "changed": ["express 4.18.2 → 4.21.2 (version)"]
+    },
+    { "id": "error_not_sbom", "description": "Valid JSON that is not an SBOM is rejected.", "file": "not-sbom.json", "error": "Not a CycloneDX or SPDX SBOM" },
+    { "id": "error_invalid_json", "description": "Broken JSON is rejected.", "file": "invalid.json", "error": "Not valid JSON" },
+    { "id": "error_spdx3", "description": "SPDX 3.0 JSON-LD gets a specific message.", "file": "spdx3.json", "error": "SPDX 3.0" },
+    { "id": "error_xml", "description": "XML SBOMs get a specific message.", "file": "cdx.xml", "error": "looks like XML" }
+  ]
+}

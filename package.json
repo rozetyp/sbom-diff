@@ -1,0 +1,23 @@
+{
+  "name": "sbom-diff",
+  "version": "2.1.0",
+  "private": true,
+  "description": "Compare two SBOMs (CycloneDX or SPDX JSON) and check license policies, entirely in the browser.",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "typecheck": "tsc --noEmit",
+    "start": "node test/serve.mjs",
+    "test": "npm run build && node --test test/core.test.mjs",
+    "test:e2e": "npm run build && node --test test/e2e.test.mjs",
+    "test:all": "npm run build && node --test test/core.test.mjs test/e2e.test.mjs"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "playwright": "^1.55.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

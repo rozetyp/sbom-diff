@@ -1,0 +1,51 @@
+{
+  "spdxVersion": "SPDX-2.3",
+  "dataLicense": "CC0-1.0",
+  "SPDXID": "SPDXRef-DOCUMENT",
+  "name": "Doc",
+  "documentNamespace": "http://spdx.org/spdxdocs/test-123",
+  "packages": [
+    {
+      "name": "alpha",
+      "SPDXID": "SPDXRef-Package-alpha",
+      "versionInfo": "2.1.0",
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/alpha"
+        }
+      ]
+    },
+    {
+      "name": "charlie",
+      "SPDXID": "SPDXRef-Package-charlie",
+      "versionInfo": "1.2.3",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/charlie"
+        }
+      ]
+    },
+    {
+      "name": "echo",
+      "SPDXID": "SPDXRef-Package-echo",
+      "versionInfo": "1.0.0",
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:npm/echo"
+        }
+      ]
+    }
+  ]
+}

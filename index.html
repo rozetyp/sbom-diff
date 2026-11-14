@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  
+  <!-- Content Security Policy (Strict) -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self';">
+  
+  <title>SBOM Diff Tool - Securely Compare Software Bills of Materials</title>
+  <meta name="description" content="100% private, browser-based SBOM comparison tool. Compare CycloneDX and SPDX SBOMs, check license policies, and export results. No data leaves your browser.">
+  <meta name="keywords" content="SBOM, Software Bill of Materials, CycloneDX, SPDX, SBOM diff, license policy, supply chain security, SBOM comparison">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://rozetyp.github.io/sbom-diff/">
+  <meta property="og:title" content="SBOM Diff Tool - Securely Compare Software Bills of Materials">
+  <meta property="og:description" content="100% private, browser-based SBOM comparison tool. Compare CycloneDX and SPDX SBOMs, check license policies, and export results.">
+  
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary">
+  <meta property="twitter:url" content="https://rozetyp.github.io/sbom-diff/">
+  <meta property="twitter:title" content="SBOM Diff Tool - Securely Compare Software Bills of Materials">
+  <meta property="twitter:description" content="100% private, browser-based SBOM comparison tool. Compare CycloneDX and SPDX SBOMs, check license policies, and export results.">
+  
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%233b82f6'/%3E%3Cpath d='M12 9l-6 7 6 7M20 9l6 7-6 7' stroke='white' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https://rozetyp.github.io/sbom-diff/">
+  
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "SBOM Diff Tool",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Web Browser",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "description": "100% private, browser-based tool for comparing Software Bills of Materials (SBOMs). Supports CycloneDX and SPDX formats, license policy checking, and diff export.",
+    "featureList": [
+      "Compare CycloneDX and SPDX SBOMs",
+      "License policy checking with presets",
+      "100% client-side processing (no data transmission)",
+      "Export diff results as JSON",
+      "Cross-format SBOM normalization"
+    ]
+  }
+  </script>
+  
+  <!-- FAQ Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Are my SBOM files uploaded to a server?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. All SBOM processing happens 100% in your browser. Your files never leave your device, and no data is transmitted to any server."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What SBOM formats are supported?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The tool supports CycloneDX JSON and SPDX JSON formats. Both formats can be compared against each other thanks to cross-format normalization."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What does 'No GPL' policy mean?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The 'No GPL' policy checks your SBOM for components with GPL (GNU General Public License) licenses, which require derivative works to be open-sourced. This helps identify potential licensing conflicts in proprietary software."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I generate an SBOM for my project?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "You can generate SBOMs using tools like Syft, Docker, CycloneDX Maven/Gradle plugins, or npm's built-in SBOM generation. See our guide at /how-to-generate-sbom.html for detailed instructions."
+        }
+      }
+    ]
+  }
+  </script>
+  
+  <style>
+    /* CSS Variables */
+    :root {
+      --color-primary: #3b82f6;
+      --color-primary-hover: #2563eb;
+      --color-primary-light: #dbeafe;
+      --color-success: #16a34a;
+      --color-success-bg: #f0fdf4;
+      --color-success-border: #86efac;
+      --color-danger: #dc2626;
+      --color-danger-bg: #fef2f2;
+      --color-danger-border: #fca5a5;
+      --color-warning: #ca8a04;
+      --color-warning-bg: #fef3c7;
+      --color-warning-border: #fde047;
+      --color-gray-50: #f9fafb;
+      --color-gray-100: #f3f4f6;
+      --color-gray-200: #e5e7eb;
+      --color-gray-300: #d1d5db;
+      --color-gray-400: #9ca3af;
+      --color-gray-500: #6b7280;
+      --color-gray-600: #374151;
+      --color-gray-700: #1f2937;
+      --color-gray-900: #111827;
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 0.75rem;
+      --space-lg: 1rem;
+      --space-xl: 1.5rem;
+      --space-2xl: 2rem;
+      --space-3xl: 3rem;
+      --radius-sm: 0.375rem;
+      --radius: 0.5rem;
+      --radius-lg: 0.75rem;
+      --radius-full: 9999px;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      --transition: all 0.2s ease;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #fff;
+      color: var(--color-gray-900);
+      font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Ubuntu, Cantarell, 'Noto Sans', 'Helvetica Neue', Arial, sans-serif;
+      line-height: 1.6;
+    }
+
+    /* Focus styles for accessibility */
+    a:focus, button:focus, select:focus, input:focus, summary:focus {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 2px;
+    }
+    input[type="checkbox"]:focus {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 1px;
+    }
+
+    /* Header */
+    .site-header {
+      position: sticky;
+      top: 0;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      box-shadow: var(--shadow-sm);
+      z-index: 10;
+    }
+    .header-content {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 var(--space-lg);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 64px;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--color-gray-900);
+    }
+    .logo svg {
+      width: 32px;
+      height: 32px;
+      color: var(--color-primary);
+    }
+    .nav {
+      display: none;
+      gap: var(--space-2xl);
+    }
+    @media (min-width: 768px) {
+      .nav {
+        display: flex;
+      }
+    }
+    .nav a {
+      font-weight: 500;
+      color: var(--color-gray-600);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+    .nav a:hover {
+      color: var(--color-gray-900);
+    }
+    .nav a.cta {
+      color: var(--color-primary);
+    }
+    .nav a.cta:hover {
+      color: var(--color-primary-hover);
+    }
+
+    /* Hero Section */
+    .hero {
+      background: var(--color-gray-50);
+      padding: 6rem var(--space-lg);
+    }
+    .hero-content {
+      max-width: 1280px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.75rem);
+      font-weight: 800;
+      line-height: 1.1;
+      margin: 0 0 var(--space-xl);
+    }
+    .hero h1 .highlight {
+      display: block;
+      color: var(--color-primary);
+    }
+    .hero p {
+      font-size: clamp(1.125rem, 2vw, 1.25rem);
+      color: var(--color-gray-600);
+      max-width: 48rem;
+      margin: 0 auto var(--space-3xl);
+      line-height: 1.7;
+    }
+    .hero p strong {
+      color: var(--color-gray-900);
+      font-weight: 600;
+    }
+    .hero-cta {
+      display: inline-block;
+      background: var(--color-primary);
+      color: #fff;
+      padding: var(--space-md) var(--space-3xl);
+      border-radius: var(--radius);
+      font-weight: 600;
+      font-size: 1.125rem;
+      text-decoration: none;
+      box-shadow: var(--shadow-lg);
+      transition: var(--transition);
+    }
+    .hero-cta:hover {
+      background: var(--color-primary-hover);
+      transform: scale(1.05);
+    }
+    .hero-cta:focus {
+      outline: 3px solid var(--color-primary-light);
+      outline-offset: 2px;
+    }
+
+    /* Features Section */
+    .features {
+      padding: 6rem var(--space-lg);
+      background: #fff;
+    }
+    .features-content {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+    .features-header {
+      text-align: center;
+      margin-bottom: 5rem;
+    }
+    .features-header h2 {
+      font-size: clamp(1.875rem, 4vw, 3rem);
+      font-weight: 800;
+      margin: 0 0 var(--space-lg);
+    }
+    .features-header p {
+      font-size: 1.125rem;
+      color: var(--color-gray-600);
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 3rem;
+    }
+    .feature {
+      display: flex;
+      gap: var(--space-lg);
+    }
+    .feature-icon {
+      flex-shrink: 0;
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .feature-icon.blue {
+      background: var(--color-primary-light);
+      color: var(--color-primary);
+    }
+    .feature-icon.green {
+      background: #dcfce7;
+      color: #16a34a;
+    }
+    .feature-icon.red {
+      background: #fee2e2;
+      color: #dc2626;
+    }
+    .feature-icon.yellow {
+      background: #fef3c7;
+      color: #ca8a04;
+    }
+    .feature-icon svg {
+      width: 24px;
+      height: 24px;
+    }
+    .feature-content h3 {
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin: 0 0 var(--space-sm);
+    }
+    .feature-content p {
+      color: var(--color-gray-600);
+      margin: 0;
+    }
+
+    /* Privacy Section */
+    .privacy {
+      background: var(--color-gray-900);
+      color: #fff;
+      padding: 5rem var(--space-lg);
+      text-align: center;
+    }
+    .privacy-content {
+      max-width: 56rem;
+      margin: 0 auto;
+    }
+    .privacy svg {
+      width: 48px;
+      height: 48px;
+      color: #60a5fa;
+      margin: 0 auto var(--space-xl);
+    }
+    .privacy h2 {
+      font-size: clamp(1.875rem, 4vw, 3rem);
+      font-weight: 800;
+      margin: 0 0 var(--space-lg);
+    }
+    .privacy p {
+      font-size: 1.125rem;
+      color: #cbd5e1;
+      line-height: 1.75;
+    }
+
+    /* App Section */
+    .app-section {
+      padding: 6rem var(--space-lg);
+      background: var(--color-gray-50);
+    }
+    .app-wrapper {
+      max-width: 1140px;
+      margin: 0 auto;
+    }
+
+    /* Tool Styles */
+    .tool-container {
+      background: #fff;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+    }
+    .tool-header {
+      background: var(--color-primary);
+      color: #fff;
+      padding: var(--space-2xl);
+      text-align: center;
+    }
+    .tool-header h2 {
+      margin: 0 0 var(--space-sm);
+      font-size: 2rem;
+      font-weight: 700;
+    }
+    .tool-header p {
+      margin: 0;
+      font-size: 1rem;
+      opacity: 0.9;
+    }
+    .tool-main {
+      padding: var(--space-2xl);
+    }
+    @media (max-width: 768px) {
+      .tool-main {
+        padding: var(--space-lg);
+      }
+    }
+    .error-banner {
+      background: var(--color-danger-bg);
+      border: 1px solid var(--color-danger-border);
+      border-radius: var(--radius);
+      padding: var(--space-lg);
+      margin-bottom: var(--space-xl);
+      color: #991b1b;
+    }
+    .upload-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-2xl);
+      margin-bottom: var(--space-2xl);
+    }
+    @media (max-width: 968px) {
+      .upload-section {
+        grid-template-columns: 1fr;
+        gap: var(--space-xl);
+      }
+    }
+    .upload-column h3 {
+      margin: 0 0 var(--space-lg);
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: var(--color-gray-700);
+    }
+    .drop-zone {
+      min-height: 200px;
+      border: 2px dashed var(--color-gray-300);
+      border-radius: var(--radius);
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition);
+      padding: var(--space-2xl);
+      text-align: center;
+    }
+    .drop-zone:hover {
+      border-color: var(--color-primary);
+      background: var(--color-gray-50);
+    }
+    .drop-zone.dragging {
+      border-color: var(--color-primary);
+      background: #eff6ff;
+      border-style: solid;
+    }
+    .drop-zone.has-file {
+      border-color: var(--color-success);
+      background: var(--color-success-bg);
+    }
+    .drop-zone-text {
+      font-size: 0.875rem;
+      color: var(--color-gray-600);
+      margin-bottom: var(--space-sm);
+    }
+    .summary-card {
+      background: #fff;
+      border: 1px solid var(--color-gray-200);
+      border-radius: var(--radius);
+      padding: var(--space-xl);
+      margin-top: var(--space-xl);
+    }
+    .summary-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-lg);
+      margin-bottom: var(--space-xl);
+    }
+    @media (max-width: 768px) {
+      .summary-stats {
+        grid-template-columns: 1fr;
+      }
+    }
+    .stat {
+      background: var(--color-gray-50);
+      border: 1px solid var(--color-gray-200);
+      border-radius: var(--radius);
+      padding: var(--space-lg);
+      text-align: center;
+    }
+    .stat-value {
+      display: block;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--color-primary);
+      line-height: 1;
+      margin-bottom: var(--space-sm);
+    }
+    .stat-label {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--color-gray-600);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .diff-view {
+      background: #fff;
+      border: 1px solid var(--color-gray-200);
+      border-radius: var(--radius);
+      padding: var(--space-xl);
+      margin-bottom: var(--space-xl);
+    }
+    .diff-summary-cards {
+      display: flex;
+      gap: var(--space-lg);
+      justify-content: space-between;
+      align-items: stretch;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: var(--space-sm);
+    }
+    .diff-summary-card {
+      background: var(--color-gray-50);
+      border: 1px solid var(--color-gray-200);
+      border-radius: var(--radius);
+      padding: var(--space-lg);
+      text-align: center;
+      min-width: 200px;
+      flex: 1 1 0;
+    }
+    .diff-summary-card.added {
+      background: var(--color-success-bg);
+      border-color: var(--color-success-border);
+    }
+    .diff-summary-card.removed {
+      background: var(--color-danger-bg);
+      border-color: var(--color-danger-border);
+    }
+    .diff-summary-card.changed {
+      background: var(--color-warning-bg);
+      border-color: var(--color-warning-border);
+    }
+    .diff-card-value {
+      display: block;
+      font-size: 2rem;
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: var(--space-sm);
+    }
+    .diff-summary-card.added .diff-card-value {
+      color: var(--color-success);
+    }
+    .diff-summary-card.removed .diff-card-value {
+      color: var(--color-danger);
+    }
+    .diff-summary-card.changed .diff-card-value {
+      color: var(--color-warning);
+    }
+    .diff-card-label {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--color-gray-600);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .diff-tabs {
+      display: flex;
+      gap: var(--space-sm);
+      border-bottom: 2px solid var(--color-gray-200);
+      margin-bottom: var(--space-xl);
+    }
+    .diff-tab {
+      padding: var(--space-md) var(--space-lg);
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--color-gray-600);
+      transition: var(--transition);
+      white-space: nowrap;
+    }
+    .diff-tab.active {
+      color: var(--color-primary);
+      border-bottom-color: var(--color-primary);
+    }
+    .diff-tab:focus {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 2px;
+    }
+    .component-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+    .component-item {
+      background: var(--color-gray-50);
+      border: 1px solid var(--color-gray-200);
+      border-radius: var(--radius);
+      padding: var(--space-lg);
+      font-size: 0.875rem;
+    }
+    .component-item.added {
+      background: var(--color-success-bg);
+      border-left: 4px solid var(--color-success);
+    }
+    .component-item.removed {
+      background: var(--color-danger-bg);
+      border-left: 4px solid var(--color-danger);
+    }
+    .component-item.changed {
+      background: var(--color-warning-bg);
+      border-left: 4px solid var(--color-warning);
+    }
+    .component-name {
+      font-weight: 600;
+      color: var(--color-gray-900);
+      margin-bottom: var(--space-xs);
+    }
+    .component-version {
+      color: var(--color-gray-600);
+      margin-bottom: var(--space-sm);
+    }
+    .policy-section {
+      background: #fff;
+      border: 1px solid var(--color-gray-200);
+      border-radius: var(--radius);
+      padding: var(--space-xl);
+      margin-bottom: var(--space-xl);
+    }
+    .policy-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-lg);
+    }
+    @media (max-width: 768px) {
+      .policy-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-lg);
+      }
+    }
+    .policy-result {
+      padding: var(--space-xl);
+      border-radius: var(--radius);
+      border: 2px solid;
+    }
+    .policy-result.pass {
+      background: var(--color-success-bg);
+      border-color: var(--color-success-border);
+    }
+    .policy-result.fail {
+      background: var(--color-danger-bg);
+      border-color: var(--color-danger-border);
+    }
+    .policy-badge {
+      font-size: 1.125rem;
+      font-weight: 700;
+      margin-bottom: var(--space-lg);
+    }
+    .policy-result.pass .policy-badge {
+      color: var(--color-success);
+    }
+    .policy-result.fail .policy-badge {
+      color: var(--color-danger);
+    }
+    .export-section {
+      text-align: center;
+      margin: var(--space-2xl) 0;
+    }
+    .export-button {
+      background: var(--color-primary);
+      color: #fff;
+      border: none;
+      padding: var(--space-md) var(--space-2xl);
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .export-button:hover {
+      background: var(--color-primary-hover);
+    }
+    .export-button:focus {
+      outline: 3px solid var(--color-primary-light);
+      outline-offset: 2px;
+    }
+    .sample-menu {
+      margin: var(--space-sm) 0 var(--space-lg);
+    }
+    .sample-summary {
+      cursor: pointer;
+      color: var(--color-primary);
+      font-weight: 600;
+    }
+    .sample-menu-items {
+      display: flex;
+      gap: var(--space-sm);
+      margin-top: var(--space-sm);
+      flex-wrap: wrap;
+    }
+    .sample-item {
+      background: var(--color-gray-100);
+      color: var(--color-gray-900);
+      border: 1px solid var(--color-gray-200);
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--radius-sm);
+      font-size: 0.8125rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .sample-item:hover {
+      background: var(--color-gray-200);
+    }
+    .inline-hint {
+      margin-top: var(--space-lg);
+      color: var(--color-gray-600);
+      font-size: 0.875rem;
+      text-align: center;
+    }
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 2px solid #f3f3f3;
+      border-top: 2px solid var(--color-primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Footer */
+    .footer {
+      background: #fff;
+      border-top: 1px solid var(--color-gray-200);
+      padding: 3rem var(--space-lg);
+      text-align: center;
+    }
+    .footer p {
+      color: var(--color-gray-500);
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-content">
+      <div class="logo">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m16 18 6-6-6-6"/><path d="m8 6-6 6 6 6"/>
+        </svg>
+        <span>SBOM Diff Tool</span>
+      </div>
+      <nav class="nav">
+        <a href="#features">Features</a>
+        <a href="#privacy">Privacy</a>
+        <a href="#tool" class="cta">Use Tool</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>
+        <span>Securely Compare</span>
+        <span class="highlight">Software Bills of Materials</span>
+      </h1>
+      <p>
+        Instantly diff and check license policies for CycloneDX and SPDX files.<br>
+        <strong>100% private, 100% in-your-browser.</strong>
+      </p>
+      <a href="#tool" class="hero-cta">Start Comparing Now</a>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features" class="features">
+    <div class="features-content">
+      <div class="features-header">
+        <h2>Why Use This Tool?</h2>
+        <p>Fast, private, and powerful analysis right in your browser.</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature">
+          <div class="feature-icon blue">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+          </div>
+          <div class="feature-content">
+            <h3>100% Private</h3>
+            <p>All processing happens in your browser. Your SBOMs are never uploaded to any server.</p>
+          </div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon green">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m16 16-4-4-4 4"/><path d="M12 2v20"/><path d="M21 12H3"/>
+            </svg>
+          </div>
+          <div class="feature-content">
+            <h3>Powerful Diffing</h3>
+            <p>Quickly see components that were added, removed, or changed between two versions.</p>
+          </div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon red">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/><path d="m9 12 2 2 4-4"/>
+            </svg>
+          </div>
+          <div class="feature-content">
+            <h3>License Policy Checks</h3>
+            <p>Define and enforce license policies to automatically flag forbidden licenses (e.g., GPL, AGPL).</p>
+          </div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon yellow">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="m3.29 7 8.71 5 8.71-5"/><path d="M12 22V12"/>
+            </svg>
+          </div>
+          <div class="feature-content">
+            <h3>Broad Format Support</h3>
+            <p>Natively parses and compares both CycloneDX and SPDX JSON formats, no conversion needed.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Privacy Section -->
+  <section id="privacy" class="privacy">
+    <div class="privacy-content">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+      </svg>
+      <h2>Your Data Never Leaves Your Device</h2>
+      <p>
+        This tool is built on a foundation of privacy. We don't have servers to upload your data to, even if we wanted to. All parsing, diffing, and policy checking is performed entirely within your browser using JavaScript. Your sensitive SBOMs stay with you.
+      </p>
+    </div>
+  </section>
+
+  <!-- App Section -->
+  <section id="tool" class="app-section">
+    <div class="app-wrapper">
+      <div class="tool-container">
+        <div class="tool-header">
+          <h2>🔍 Start Comparing</h2>
+          <p>Upload two SBOMs to see the differences</p>
+        </div>
+        <div class="tool-main">
+          <div id="error" class="error-banner" style="display:none"></div>
+          <div class="upload-section">
+            <div class="upload-column">
+              <h3>SBOM A (Baseline)</h3>
+              <div id="dropA" class="drop-zone" tabindex="0">
+                <div class="drop-zone-text">Drop SBOM A (JSON) or click to select</div>
+                <input id="fileA" type="file" accept="application/json,.json" style="display:none"/>
+              </div>
+              <details class="sample-menu" aria-label="Load sample SBOM A">
+                <summary class="sample-summary">Load samples</summary>
+                <div class="sample-menu-items">
+                  <button class="sample-item" data-sample="A:cyclonedx" type="button">CycloneDX</button>
+                  <button class="sample-item" data-sample="A:spdx" type="button">SPDX</button>
+                </div>
+              </details>
+              <div id="summaryA"></div>
+            </div>
+            <div class="upload-column">
+              <h3>SBOM B (Comparison)</h3>
+              <div id="dropB" class="drop-zone" tabindex="0">
+                <div class="drop-zone-text">Drop SBOM B (JSON) or click to select</div>
+                <input id="fileB" type="file" accept="application/json,.json" style="display:none"/>
+              </div>
+              <details class="sample-menu" aria-label="Load sample SBOM B">
+                <summary class="sample-summary">Load samples</summary>
+                <div class="sample-menu-items">
+                  <button class="sample-item" data-sample="B:cyclonedx" type="button">CycloneDX</button>
+                  <button class="sample-item" data-sample="B:spdx" type="button">SPDX</button>
+                </div>
+              </details>
+              <div id="summaryB"></div>
+            </div>
+          </div>
+
+          <div id="diffSection" style="display:none">
+            <div class="diff-view">
+              <div class="diff-summary-cards">
+                <div class="diff-summary-card added"><span class="diff-card-value" id="addedCount">0</span><span class="diff-card-label">Added</span></div>
+                <div class="diff-summary-card removed"><span class="diff-card-value" id="removedCount">0</span><span class="diff-card-label">Removed</span></div>
+                <div class="diff-summary-card changed"><span class="diff-card-value" id="changedCount">0</span><span class="diff-card-label">Changed</span></div>
+              </div>
+              <div class="diff-tabs">
+                <button class="diff-tab active" data-tab="added">Added <span id="badgeAdded" style="margin-left:var(--space-sm);padding:var(--space-xs) var(--space-sm);background:var(--color-gray-100);border-radius:var(--radius-full);font-size:.75rem">0</span></button>
+                <button class="diff-tab" data-tab="removed">Removed <span id="badgeRemoved" style="margin-left:var(--space-sm);padding:var(--space-xs) var(--space-sm);background:var(--color-gray-100);border-radius:var(--radius-full);font-size:.75rem">0</span></button>
+                <button class="diff-tab" data-tab="changed">Changed <span id="badgeChanged" style="margin-left:var(--space-sm);padding:var(--space-xs) var(--space-sm);background:var(--color-gray-100);border-radius:var(--radius-full);font-size:.75rem">0</span></button>
+              </div>
+              <div id="listAdded" class="component-list"></div>
+              <div id="listRemoved" class="component-list" style="display:none"></div>
+              <div id="listChanged" class="component-list" style="display:none"></div>
+            </div>
+          </div>
+
+          <p id="inlineHint" class="inline-hint" style="display:none">Load a second SBOM to compare. The license policy check below already works on this one.</p>
+
+          <div id="policySection" style="display:none">
+            <div class="policy-section">
+              <div class="policy-header">
+                <h2 style="margin:0;font-size:1.25rem;font-weight:600">License Policy</h2>
+                <label style="display:flex;align-items:center;gap:var(--space-sm);cursor:pointer">
+                  <input id="policyToggle" type="checkbox"/> <span style="font-size:.875rem;font-weight:500;color:var(--color-gray-600)">Enable policy check</span>
+                </label>
+              </div>
+              <div id="policyControls" style="display:none;margin-bottom:var(--space-xl)">
+                <label style="font-size:.875rem;font-weight:500;color:var(--color-gray-600)">Preset: 
+                  <select id="policyPreset" style="padding:var(--space-sm) var(--space-lg);border:1px solid var(--color-gray-300);border-radius:var(--radius-sm);font-size:.875rem;margin-left:var(--space-sm)"></select>
+                </label>
+                <label id="policyCustomWrap" style="display:none;margin-top:var(--space-md);font-size:.875rem;font-weight:500;color:var(--color-gray-600)">Forbidden licenses (comma-separated, * is a wildcard):
+                  <input id="policyCustom" type="text" placeholder="GPL-*, SSPL-1.0, BUSL-1.1" autocomplete="off" style="display:block;width:100%;box-sizing:border-box;margin-top:var(--space-sm);padding:var(--space-sm) var(--space-md);border:1px solid var(--color-gray-300);border-radius:var(--radius-sm);font-size:.875rem;font-family:ui-monospace,monospace"/>
+                </label>
+                <p id="policyRules" style="margin:var(--space-md) 0 0;font-size:.8125rem;color:var(--color-text-secondary)"></p>
+              </div>
+              <div id="policyResult"></div>
+            </div>
+          </div>
+
+          <div id="exportSection" style="display:none">
+            <div class="export-section">
+              <button id="copyBtn" class="export-button" type="button" style="background:var(--color-gray-600);margin-right:var(--space-md)">Copy as Markdown</button>
+              <button id="exportBtn" class="export-button" type="button">Export JSON</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>SBOM Diff is free and open source (MIT). Everything runs in your browser.</p>
+    <p style="margin-top:var(--space-md)">
+      <a href="https://github.com/rozetyp/sbom-diff" target="_blank" rel="noopener noreferrer" style="margin:0 var(--space-md)">GitHub</a> |
+      <a href="./how-to-generate-sbom.html" style="margin:0 var(--space-md)">SBOM Guide</a> |
+      <a href="./cyclonedx-vs-spdx.html" style="margin:0 var(--space-md)">CycloneDX vs SPDX</a> |
+      <a href="./sbom-compliance-policies.html" style="margin:0 var(--space-md)">Compliance</a>
+    </p>
+  </footer>
+
+  <script src="core.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,1073 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.4",
+  "version": 1,
+  "components": [
+    {
+      "type": "library",
+      "name": "biglib-0",
+      "version": "1.0.0",
+      "purl": "pkg:npm/biglib-0@1.0.0",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-1",
+      "version": "2.7.3",
+      "purl": "pkg:npm/biglib-1@2.7.3",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-2",
+      "version": "3.4.6",
+      "purl": "pkg:npm/biglib-2@3.4.6",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-3",
+      "version": "1.1.9",
+      "purl": "pkg:npm/biglib-3@1.1.9",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-4",
+      "version": "2.8.2",
+      "purl": "pkg:npm/biglib-4@2.8.2",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-5",
+      "version": "3.5.5",
+      "purl": "pkg:npm/biglib-5@3.5.5",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-6",
+      "version": "1.2.8",
+      "purl": "pkg:npm/biglib-6@1.2.8",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-7",
+      "version": "2.9.1",
+      "purl": "pkg:npm/biglib-7@2.9.1",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-8",
+      "version": "3.6.4",
+      "purl": "pkg:npm/biglib-8@3.6.4",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-9",
+      "version": "1.3.7",
+      "purl": "pkg:npm/biglib-9@1.3.7",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-10",
+      "version": "2.0.0",
+      "purl": "pkg:npm/biglib-10@2.0.0",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-11",
+      "version": "3.7.3",
+      "purl": "pkg:npm/biglib-11@3.7.3",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-12",
+      "version": "1.4.6",
+      "purl": "pkg:npm/biglib-12@1.4.6",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-13",
+      "version": "2.1.9",
+      "purl": "pkg:npm/biglib-13@2.1.9",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-14",
+      "version": "3.8.2",
+      "purl": "pkg:npm/biglib-14@3.8.2",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-15",
+      "version": "1.5.5",
+      "purl": "pkg:npm/biglib-15@1.5.5",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-16",
+      "version": "2.2.8",
+      "purl": "pkg:npm/biglib-16@2.2.8",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-17",
+      "version": "3.9.1",
+      "purl": "pkg:npm/biglib-17@3.9.1",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-18",
+      "version": "1.6.4",
+      "purl": "pkg:npm/biglib-18@1.6.4",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-19",
+      "version": "2.3.7",
+      "purl": "pkg:npm/biglib-19@2.3.7",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-20",
+      "version": "3.0.0",
+      "purl": "pkg:npm/biglib-20@3.0.0",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-21",
+      "version": "1.7.3",
+      "purl": "pkg:npm/biglib-21@1.7.3",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-22",
+      "version": "2.4.6",
+      "purl": "pkg:npm/biglib-22@2.4.6",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-23",
+      "version": "3.1.9",
+      "purl": "pkg:npm/biglib-23@3.1.9",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-24",
+      "version": "1.8.2",
+      "purl": "pkg:npm/biglib-24@1.8.2",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-25",
+      "version": "2.5.5",
+      "purl": "pkg:npm/biglib-25@2.5.5",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-26",
+      "version": "3.2.8",
+      "purl": "pkg:npm/biglib-26@3.2.8",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-27",
+      "version": "1.9.1",
+      "purl": "pkg:npm/biglib-27@1.9.1",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-28",
+      "version": "2.6.4",
+      "purl": "pkg:npm/biglib-28@2.6.4",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-29",
+      "version": "3.3.7",
+      "purl": "pkg:npm/biglib-29@3.3.7",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-30",
+      "version": "1.0.0",
+      "purl": "pkg:npm/biglib-30@1.0.0",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-31",
+      "version": "2.7.3",
+      "purl": "pkg:npm/biglib-31@2.7.3",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-32",
+      "version": "3.4.6",
+      "purl": "pkg:npm/biglib-32@3.4.6",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-33",
+      "version": "1.1.9",
+      "purl": "pkg:npm/biglib-33@1.1.9",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-34",
+      "version": "2.8.2",
+      "purl": "pkg:npm/biglib-34@2.8.2",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-35",
+      "version": "3.5.5",
+      "purl": "pkg:npm/biglib-35@3.5.5",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-36",
+      "version": "1.2.8",
+      "purl": "pkg:npm/biglib-36@1.2.8",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-37",
+      "version": "2.9.1",
+      "purl": "pkg:npm/biglib-37@2.9.1",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-38",
+      "version": "3.6.4",
+      "purl": "pkg:npm/biglib-38@3.6.4",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-39",
+      "version": "1.3.7",
+      "purl": "pkg:npm/biglib-39@1.3.7",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-40",
+      "version": "2.0.0",
+      "purl": "pkg:npm/biglib-40@2.0.0",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-41",
+      "version": "3.7.3",
+      "purl": "pkg:npm/biglib-41@3.7.3",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-42",
+      "version": "1.4.6",
+      "purl": "pkg:npm/biglib-42@1.4.6",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-43",
+      "version": "2.1.9",
+      "purl": "pkg:npm/biglib-43@2.1.9",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-44",
+      "version": "3.8.2",
+      "purl": "pkg:npm/biglib-44@3.8.2",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-45",
+      "version": "1.5.5",
+      "purl": "pkg:npm/biglib-45@1.5.5",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-46",
+      "version": "2.2.8",
+      "purl": "pkg:npm/biglib-46@2.2.8",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-47",
+      "version": "3.9.1",
+      "purl": "pkg:npm/biglib-47@3.9.1",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-48",
+      "version": "1.6.4",
+      "purl": "pkg:npm/biglib-48@1.6.4",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-49",
+      "version": "2.3.7",
+      "purl": "pkg:npm/biglib-49@2.3.7",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-50",
+      "version": "3.0.0",
+      "purl": "pkg:npm/biglib-50@3.0.0",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-51",
+      "version": "1.7.3",
+      "purl": "pkg:npm/biglib-51@1.7.3",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-52",
+      "version": "2.4.6",
+      "purl": "pkg:npm/biglib-52@2.4.6",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-53",
+      "version": "3.1.9",
+      "purl": "pkg:npm/biglib-53@3.1.9",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-54",
+      "version": "1.8.2",
+      "purl": "pkg:npm/biglib-54@1.8.2",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-55",
+      "version": "2.5.5",
+      "purl": "pkg:npm/biglib-55@2.5.5",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-56",
+      "version": "3.2.8",
+      "purl": "pkg:npm/biglib-56@3.2.8",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-57",
+      "version": "1.9.1",
+      "purl": "pkg:npm/biglib-57@1.9.1",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-58",
+      "version": "2.6.4",
+      "purl": "pkg:npm/biglib-58@2.6.4",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-59",
+      "version": "3.3.7",
+      "purl": "pkg:npm/biglib-59@3.3.7",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-60",
+      "version": "1.0.0",
+      "purl": "pkg:npm/biglib-60@1.0.0",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-61",
+      "version": "2.7.3",
+      "purl": "pkg:npm/biglib-61@2.7.3",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-62",
+      "version": "3.4.6",
+      "purl": "pkg:npm/biglib-62@3.4.6",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-63",
+      "version": "1.1.9",
+      "purl": "pkg:npm/biglib-63@1.1.9",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-64",
+      "version": "2.8.2",
+      "purl": "pkg:npm/biglib-64@2.8.2",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-65",
+      "version": "3.5.5",
+      "purl": "pkg:npm/biglib-65@3.5.5",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-66",
+      "version": "1.2.8",
+      "purl": "pkg:npm/biglib-66@1.2.8",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-67",
+      "version": "2.9.1",
+      "purl": "pkg:npm/biglib-67@2.9.1",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-68",
+      "version": "3.6.4",
+      "purl": "pkg:npm/biglib-68@3.6.4",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-69",
+      "version": "1.3.7",
+      "purl": "pkg:npm/biglib-69@1.3.7",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-70",
+      "version": "2.0.0",
+      "purl": "pkg:npm/biglib-70@2.0.0",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-71",
+      "version": "3.7.3",
+      "purl": "pkg:npm/biglib-71@3.7.3",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-72",
+      "version": "1.4.6",
+      "purl": "pkg:npm/biglib-72@1.4.6",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-73",
+      "version": "2.1.9",
+      "purl": "pkg:npm/biglib-73@2.1.9",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-74",
+      "version": "3.8.2",
+      "purl": "pkg:npm/biglib-74@3.8.2",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-75",
+      "version": "1.5.5",
+      "purl": "pkg:npm/biglib-75@1.5.5",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-76",
+      "version": "2.2.8",
+      "purl": "pkg:npm/biglib-76@2.2.8",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-77",
+      "version": "3.9.1",
+      "purl": "pkg:npm/biglib-77@3.9.1",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-78",
+      "version": "1.6.4",
+      "purl": "pkg:npm/biglib-78@1.6.4",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "biglib-79",
+      "version": "2.3.7",
+      "purl": "pkg:npm/biglib-79@2.3.7",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "stay-same",
+      "version": "1.0.0",
+      "purl": "pkg:npm/stay-same@1.0.0",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "new-one",
+      "version": "0.1.0",
+      "purl": "pkg:npm/new-one@0.1.0",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    }
+  ]
+}

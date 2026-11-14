@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How to Generate SBOM - Complete Guide for Docker, Node.js, Maven, and More</title>
+  <meta name="description" content="Learn how to generate Software Bills of Materials (SBOMs) for your projects using Docker, Syft, npm, Maven, Gradle, and other popular tools. Step-by-step guide with examples.">
+  <link rel="canonical" href="https://rozetyp.github.io/sbom-diff/how-to-generate-sbom.html">
+  <style>
+    body {
+      font-family: ui-sans-serif, system-ui, sans-serif;
+      line-height: 1.7;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem;
+      color: #1f2937;
+    }
+    h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 0.5rem; }
+    h2 { font-size: 1.75rem; font-weight: 700; margin-top: 2.5rem; border-bottom: 2px solid #e5e7eb; padding-bottom: 0.5rem; }
+    h3 { font-size: 1.25rem; font-weight: 600; margin-top: 1.5rem; }
+    code { background: #f3f4f6; padding: 0.125rem 0.375rem; border-radius: 0.25rem; font-size: 0.9em; }
+    pre { background: #1f2937; color: #f9fafb; padding: 1rem; border-radius: 0.5rem; overflow-x: auto; }
+    pre code { background: none; color: inherit; padding: 0; }
+    a { color: #3b82f6; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .nav { background: #3b82f6; color: white; padding: 1rem; margin: -2rem -2rem 2rem; text-align: center; }
+    .nav a { color: white; font-weight: 600; }
+    .footer { margin-top: 4rem; padding-top: 2rem; border-top: 1px solid #e5e7eb; text-align: center; color: #6b7280; }
+  </style>
+</head>
+<body>
+  <div class="nav">
+    <a href="./">← Back to SBOM Diff Tool</a>
+  </div>
+
+  <h1>How to Generate a Software Bill of Materials (SBOM)</h1>
+  <p><strong>Last updated:</strong> October 2025</p>
+
+  <p>A Software Bill of Materials (SBOM) is a comprehensive inventory of all components, libraries, and dependencies in your software. Here's how to generate SBOMs for various project types.</p>
+
+  <h2>Why Generate an SBOM?</h2>
+  <ul>
+    <li><strong>Security:</strong> Identify vulnerable dependencies and track supply chain risks</li>
+    <li><strong>Compliance:</strong> Meet regulatory requirements (NTIA, CISA, EU Cyber Resilience Act)</li>
+    <li><strong>License Management:</strong> Audit open-source licenses and avoid legal issues</li>
+    <li><strong>Change Tracking:</strong> Compare SBOMs over time to detect dependency changes</li>
+  </ul>
+
+  <h2>1. Docker Images</h2>
+  <p>Docker Desktop (version 4.7+) includes built-in SBOM generation using Syft.</p>
+
+  <h3>Generate CycloneDX SBOM</h3>
+  <pre><code>docker sbom --format cyclonedx-json myimage:latest > sbom.json</code></pre>
+
+  <h3>Generate SPDX SBOM</h3>
+  <pre><code>docker sbom --format spdx-json myimage:latest > sbom.json</code></pre>
+
+  <h3>Example: Compare Alpine Linux Versions</h3>
+  <pre><code># Generate SBOMs for two Alpine versions
+docker sbom --format cyclonedx-json alpine:3.18 > alpine-318.json
+docker sbom --format cyclonedx-json alpine:3.20 > alpine-320.json
+
+# Load both into https://rozetyp.github.io/sbom-diff/ to see differences (nothing is uploaded)</code></pre>
+
+  <h2>2. Node.js / npm Projects</h2>
+
+  <h3>Using npm (built-in, npm 9.4+)</h3>
+  <pre><code>npm sbom --sbom-format=cyclonedx > sbom.json</code></pre>
+
+  <h3>Using CycloneDX Node Module</h3>
+  <pre><code># Install globally
+npm install -g @cyclonedx/cyclonedx-npm
+
+# Generate SBOM
+cyclonedx-npm --output-file sbom.json</code></pre>
+
+  <h2>3. Maven Projects (Java)</h2>
+
+  <h3>Using CycloneDX Maven Plugin</h3>
+  <p>Add to your <code>pom.xml</code>:</p>
+  <pre><code>&lt;plugin&gt;
+  &lt;groupId&gt;org.cyclonedx&lt;/groupId&gt;
+  &lt;artifactId&gt;cyclonedx-maven-plugin&lt;/artifactId&gt;
+  &lt;version&gt;2.7.9&lt;/version&gt;
+  &lt;executions&gt;
+    &lt;execution&gt;
+      &lt;goals&gt;&lt;goal&gt;makeAggregateBom&lt;/goal&gt;&lt;/goals&gt;
+    &lt;/execution&gt;
+  &lt;/executions&gt;
+&lt;/plugin&gt;</code></pre>
+
+  <p>Then run:</p>
+  <pre><code>mvn cyclonedx:makeAggregateBom</code></pre>
+
+  <p>Output: <code>target/bom.json</code></p>
+
+  <h2>4. Gradle Projects (Java/Kotlin)</h2>
+
+  <h3>Using CycloneDX Gradle Plugin</h3>
+  <p>Add to your <code>build.gradle</code>:</p>
+  <pre><code>plugins {
+    id 'org.cyclonedx.bom' version '1.8.2'
+}
+
+cyclonedxBom {
+    outputFormat = "json"
+}</code></pre>
+
+  <p>Then run:</p>
+  <pre><code>gradle cyclonedxBom</code></pre>
+
+  <p>Output: <code>build/reports/bom.json</code></p>
+
+  <h2>5. Python Projects</h2>
+
+  <h3>Using CycloneDX Python</h3>
+  <pre><code># Install
+pip install cyclonedx-bom
+
+# Generate from requirements.txt
+cyclonedx-py requirements requirements.txt -o sbom.json
+
+# Or from installed packages
+cyclonedx-py environment -o sbom.json</code></pre>
+
+  <h2>6. Universal Tool: Syft</h2>
+  <p><a href="https://github.com/anchore/syft" target="_blank" rel="noopener noreferrer">Syft</a> by Anchore works with any language and can scan filesystems, container images, and archives.</p>
+
+  <h3>Install Syft</h3>
+  <pre><code># macOS
+brew install syft
+
+# Linux
+curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh</code></pre>
+
+  <h3>Generate SBOM from Directory</h3>
+  <pre><code>syft dir:. -o cyclonedx-json > sbom.json</code></pre>
+
+  <h3>Generate SBOM from Container Image</h3>
+  <pre><code>syft myimage:latest -o spdx-json > sbom.json</code></pre>
+
+  <h2>7. GitHub Actions / CI/CD</h2>
+
+  <h3>Generate SBOM in GitHub Actions</h3>
+  <pre><code>name: Generate SBOM
+on: [push]
+jobs:
+  sbom:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Generate SBOM with Syft
+        uses: anchore/sbom-action@v0
+        with:
+          format: cyclonedx-json
+          output-file: sbom.json
+      - name: Upload SBOM
+        uses: actions/upload-artifact@v3
+        with:
+          name: sbom
+          path: sbom.json</code></pre>
+
+  <h2>Next Steps</h2>
+  <ul>
+    <li><strong>Compare SBOMs:</strong> Use our <a href="./">SBOM Diff Tool</a> to compare two versions and see what changed</li>
+    <li><strong>Check Licenses:</strong> Enable license policy checking to detect GPL, AGPL, or other restricted licenses</li>
+    <li><strong>Automate:</strong> Integrate SBOM generation into your CI/CD pipeline</li>
+  </ul>
+
+  <h2>Related Guides</h2>
+  <ul>
+    <li><a href="./cyclonedx-vs-spdx.html">CycloneDX vs SPDX: Which Format Should I Use?</a></li>
+    <li><a href="./sbom-compliance-policies.html">SBOM Compliance & License Policies Explained</a></li>
+  </ul>
+
+  <div class="footer">
+    <p><a href="./">Try the SBOM Diff Tool</a> | <a href="https://github.com/rozetyp/sbom-diff" target="_blank" rel="noopener noreferrer">View on GitHub</a></p>
+  </div>
+</body>
+</html>

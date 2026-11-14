@@ -1,0 +1,10 @@
+{
+  "@context": "https://spdx.org/rdf/3.0.1/spdx-context.jsonld",
+  "@graph": [
+    {
+      "type": "software_Package",
+      "name": "x",
+      "software_packageVersion": "1.0.0"
+    }
+  ]
+}

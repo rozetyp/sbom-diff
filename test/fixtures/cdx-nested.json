@@ -1,0 +1,48 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.5",
+  "version": 1,
+  "components": [
+    {
+      "type": "library",
+      "name": "framework",
+      "version": "2.0.0",
+      "purl": "pkg:npm/framework@2.0.0",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "components": [
+        {
+          "type": "library",
+          "name": "bundled-gpl",
+          "version": "1.0.0",
+          "purl": "pkg:npm/bundled-gpl@1.0.0",
+          "licenses": [
+            {
+              "license": {
+                "id": "GPL-3.0-only"
+              }
+            }
+          ]
+        },
+        {
+          "type": "library",
+          "name": "bundled-ok",
+          "version": "1.0.0",
+          "purl": "pkg:npm/bundled-ok@1.0.0",
+          "licenses": [
+            {
+              "license": {
+                "id": "MIT"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

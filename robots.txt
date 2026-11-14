@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://rozetyp.github.io/sbom-diff/sitemap.xml

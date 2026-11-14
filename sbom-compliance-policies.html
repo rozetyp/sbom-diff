@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SBOM Compliance & License Policies Explained - NTIA, CISA, GPL, AGPL</title>
+  <meta name="description" content="Complete guide to SBOM compliance requirements, license policies (GPL, AGPL, SSPL), NTIA minimum elements, CISA guidelines, and how to implement license checks in your supply chain.">
+  <link rel="canonical" href="https://rozetyp.github.io/sbom-diff/sbom-compliance-policies.html">
+  <style>
+    body {
+      font-family: ui-sans-serif, system-ui, sans-serif;
+      line-height: 1.7;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem;
+      color: #1f2937;
+    }
+    h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 0.5rem; }
+    h2 { font-size: 1.75rem; font-weight: 700; margin-top: 2.5rem; border-bottom: 2px solid #e5e7eb; padding-bottom: 0.5rem; }
+    h3 { font-size: 1.25rem; font-weight: 600; margin-top: 1.5rem; }
+    code { background: #f3f4f6; padding: 0.125rem 0.375rem; border-radius: 0.25rem; font-size: 0.9em; }
+    table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+    th, td { border: 1px solid #d1d5db; padding: 0.75rem; text-align: left; }
+    th { background: #f3f4f6; font-weight: 600; }
+    a { color: #3b82f6; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .nav { background: #3b82f6; color: white; padding: 1rem; margin: -2rem -2rem 2rem; text-align: center; }
+    .nav a { color: white; font-weight: 600; }
+    .footer { margin-top: 4rem; padding-top: 2rem; border-top: 1px solid #e5e7eb; text-align: center; color: #6b7280; }
+    .warning { background: #fef3c7; border-left: 4px solid #ca8a04; padding: 1rem; margin: 1rem 0; }
+    .info { background: #dbeafe; border-left: 4px solid #3b82f6; padding: 1rem; margin: 1rem 0; }
+  </style>
+</head>
+<body>
+  <div class="nav">
+    <a href="./">← Back to SBOM Diff Tool</a>
+  </div>
+
+  <h1>SBOM Compliance & License Policies Explained</h1>
+  <p><strong>Last updated:</strong> November 2026</p>
+
+  <p>Software Bills of Materials (SBOMs) are increasingly required for compliance, supply chain security, and license management. This guide covers regulatory requirements, common license policies, and how to implement automated checks.</p>
+
+  <h2>Regulatory Compliance Requirements</h2>
+
+  <h3>1. U.S. Executive Order 14028 (2021)</h3>
+  <p>President Biden's cybersecurity executive order mandates SBOMs for software sold to federal agencies. Key requirements:</p>
+  <ul>
+    <li>All software vendors must provide SBOMs to federal customers</li>
+    <li>SBOMs must include components, versions, and dependencies</li>
+    <li>Focus on supply chain security and vulnerability management</li>
+  </ul>
+
+  <h3>2. NTIA Minimum Elements (2021)</h3>
+  <p>The National Telecommunications and Information Administration (NTIA) defined seven minimum required fields for SBOMs:</p>
+  <table>
+    <thead>
+      <tr>
+        <th>Field</th>
+        <th>Description</th>
+        <th>CycloneDX</th>
+        <th>SPDX</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Component Name</strong></td>
+        <td>Human-readable name</td>
+        <td><code>name</code></td>
+        <td><code>name</code></td>
+      </tr>
+      <tr>
+        <td><strong>Component Version</strong></td>
+        <td>Version identifier</td>
+        <td><code>version</code></td>
+        <td><code>versionInfo</code></td>
+      </tr>
+      <tr>
+        <td><strong>Unique Identifier</strong></td>
+        <td>PURL, CPE, or SWID</td>
+        <td><code>purl</code></td>
+        <td><code>externalRefs</code></td>
+      </tr>
+      <tr>
+        <td><strong>Dependency Relationships</strong></td>
+        <td>How components relate</td>
+        <td><code>dependencies</code></td>
+        <td><code>relationships</code></td>
+      </tr>
+      <tr>
+        <td><strong>Author</strong></td>
+        <td>Component creator</td>
+        <td><code>author</code></td>
+        <td><code>originator</code></td>
+      </tr>
+      <tr>
+        <td><strong>Timestamp</strong></td>
+        <td>SBOM creation time</td>
+        <td><code>metadata.timestamp</code></td>
+        <td><code>created</code></td>
+      </tr>
+      <tr>
+        <td><strong>Supplier</strong></td>
+        <td>Component source</td>
+        <td><code>supplier</code></td>
+        <td><code>supplier</code></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="info">
+    <strong>Note:</strong> Both CycloneDX and SPDX can carry all NTIA minimum elements, but generators do not always fill them in. Check that supplier, version and unique identifiers (purls) are actually populated.
+  </div>
+
+  <h3>3. CISA Guidelines</h3>
+  <p>The Cybersecurity and Infrastructure Security Agency (CISA) provides guidance on SBOM implementation. In 2026 it published updated minimum elements that replace NTIA's 2021 list, adding fields such as component hash, component license, the name of the tool that generated the SBOM, and the generation context. General practice it recommends:</p>
+  <ul>
+    <li><strong>Machine-readable formats:</strong> JSON, XML, or YAML (not PDFs or spreadsheets)</li>
+    <li><strong>Automation:</strong> SBOMs should be generated automatically, not manually</li>
+    <li><strong>Continuous updates:</strong> Generate new SBOMs with each release</li>
+    <li><strong>Vulnerability correlation:</strong> Link SBOMs to CVE databases for real-time risk assessment</li>
+  </ul>
+
+  <h3>4. EU Cyber Resilience Act (Regulation (EU) 2024/2847)</h3>
+  <p>The CRA is in force. Manufacturers' duty to report actively exploited vulnerabilities and severe incidents applies from 11 September 2026; the remaining obligations, including the SBOM requirement, apply from 11 December 2027. It requires:</p>
+  <ul>
+    <li>A machine-readable SBOM covering at least the top-level dependencies of "products with digital elements" sold in the EU (kept in the technical documentation; publishing it is not required)</li>
+    <li>Continuous security updates and vulnerability disclosure</li>
+    <li>CE marking for cybersecurity compliance</li>
+  </ul>
+
+  <h2>Open Source License Policies</h2>
+
+  <p>License compliance is a critical reason for generating SBOMs. Here are common license policies and their implications:</p>
+
+  <h3>1. No GPL Policy</h3>
+  <p><strong>What it means:</strong> Block all GNU General Public License (GPL) versions.</p>
+  <p><strong>Why:</strong> GPL requires derivative works to be open-sourced under GPL. If you link GPL code into proprietary software, you may be legally required to release your source code.</p>
+  <p><strong>Variants:</strong></p>
+  <ul>
+    <li><code>GPL-2.0</code> - Original GPL</li>
+    <li><code>GPL-3.0</code> - Updated version with anti-tivoization and patent clauses</li>
+    <li><code>GPL-2.0-or-later</code> - Allows upgrading to GPL-3.0</li>
+  </ul>
+
+  <div class="warning">
+    <strong>⚠️ Common Misconception:</strong> Using GPL libraries in a microservice or container <em>may</em> still trigger copyleft obligations if the service is distributed to customers. Consult legal counsel for your specific use case.
+  </div>
+
+  <h3>2. No AGPL Policy</h3>
+  <p><strong>What it means:</strong> Block all Affero General Public License (AGPL) versions.</p>
+  <p><strong>Why:</strong> AGPL extends GPL's copyleft to <strong>network services</strong>. If you modify AGPL code and run it as a web service, you must release your modifications—even if you don't distribute the software.</p>
+  <p><strong>Impact:</strong> AGPL is particularly restrictive for SaaS companies. Many enterprises ban AGPL entirely.</p>
+
+  <h3>3. No Copyleft Policy</h3>
+  <p><strong>What it blocks:</strong> GPL, AGPL, LGPL (Lesser GPL), MPL (Mozilla Public License), EPL (Eclipse Public License), and similar "share-alike" licenses.</p>
+  <p><strong>Why:</strong> Maximum flexibility for proprietary software. Avoid any obligation to share source code.</p>
+
+  <h3>4. No SSPL Policy</h3>
+  <p><strong>What it means:</strong> Block Server Side Public License (used by MongoDB, Elastic).</p>
+  <p><strong>Why:</strong> SSPL requires cloud providers to open-source their entire service stack if they offer the software as a service. Even more restrictive than AGPL.</p>
+
+  <h3>5. Permissive Only Policy</h3>
+  <p><strong>What it allows:</strong> Only MIT, Apache-2.0, BSD-2-Clause, BSD-3-Clause, ISC, Unlicense, and similar permissive licenses.</p>
+  <p><strong>Why:</strong> Maximum freedom to use, modify, and distribute without source code disclosure obligations.</p>
+
+  <h2>How to Implement License Policies</h2>
+
+  <h3>Option 1: Use Our SBOM Diff Tool</h3>
+  <ol>
+    <li>Generate your SBOM (see <a href="./how-to-generate-sbom.html">How to Generate SBOM</a>)</li>
+    <li>Load it into <a href="./">SBOM Diff</a> (it runs in your browser; nothing is uploaded)</li>
+    <li>Enable "License Policy" and select a preset (No GPL, No AGPL, etc.)</li>
+    <li>Review violations and remediate by replacing libraries</li>
+  </ol>
+
+  <h3>Option 2: Automate in CI/CD</h3>
+  <p>Integrate license checking into your build pipeline:</p>
+  <pre><code># Example: GitHub Actions with Syft + Grype
+name: License Check
+on: [push]
+jobs:
+  license-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Generate SBOM
+        run: syft dir:. -o cyclonedx-json > sbom.json
+      - name: Check for GPL
+        run: |
+          if grep -q "GPL-" sbom.json; then
+            echo "❌ GPL license detected!"
+            exit 1
+          fi</code></pre>
+
+  <h3>Option 3: Use Dedicated Tools</h3>
+  <ul>
+    <li><strong>Dependency-Track:</strong> Open-source SBOM analysis platform with policy engine</li>
+    <li><strong>FOSSA:</strong> Commercial license compliance and vulnerability management</li>
+    <li><strong>Snyk:</strong> Developer-focused security with license scanning</li>
+    <li><strong>WhiteSource (Mend):</strong> Enterprise license and security management</li>
+  </ul>
+
+  <h2>Common License Violations & Remediation</h2>
+
+  <h3>Scenario 1: GPL in Proprietary Software</h3>
+  <p><strong>Problem:</strong> You're building a proprietary desktop app and discover a GPL-licensed library in your SBOM.</p>
+  <p><strong>Solutions:</strong></p>
+  <ul>
+    <li><strong>Replace it:</strong> Find a permissive alternative (e.g., replace GPL library with MIT-licensed equivalent)</li>
+    <li><strong>Isolate it:</strong> If possible, use the GPL library in a separate process (not linked) to avoid copyleft</li>
+    <li><strong>Negotiate:</strong> Some GPL projects offer dual licensing (open-source GPL + commercial license)</li>
+    <li><strong>Go open-source:</strong> If you can't avoid GPL, consider open-sourcing your project</li>
+  </ul>
+
+  <h3>Scenario 2: AGPL in SaaS Platform</h3>
+  <p><strong>Problem:</strong> You're running a SaaS product and find an AGPL library in your SBOM.</p>
+  <p><strong>Solutions:</strong></p>
+  <ul>
+    <li><strong>Replace immediately:</strong> AGPL's network copyleft is very broad—find a permissive alternative</li>
+    <li><strong>External service:</strong> If the library provides an API, use a hosted version instead of self-hosting</li>
+    <li><strong>Legal review:</strong> In rare cases, the AGPL may not apply (e.g., you don't modify the code). Get legal advice.</li>
+  </ul>
+
+  <h3>Scenario 3: Unknown Licenses</h3>
+  <p><strong>Problem:</strong> Your SBOM shows components with "UNKNOWN" or "NOASSERTION" licenses.</p>
+  <p><strong>Solutions:</strong></p>
+  <ul>
+    <li><strong>Manual research:</strong> Check the component's GitHub repo or npm page for license info</li>
+    <li><strong>Contact author:</strong> Ask the maintainer to add a LICENSE file</li>
+    <li><strong>Assume proprietary:</strong> If no license is specified, the code is copyrighted and cannot be used legally</li>
+    <li><strong>Replace it:</strong> Use a component with a clear, permissive license</li>
+  </ul>
+
+  <h2>Best Practices</h2>
+
+  <ol>
+    <li><strong>Generate SBOMs early:</strong> Add SBOM generation to your CI/CD pipeline from day one</li>
+    <li><strong>Automate policy checks:</strong> Block builds that violate license policies</li>
+    <li><strong>Track changes:</strong> Compare SBOMs between versions to catch new violations (use <a href="./">our diff tool</a>)</li>
+    <li><strong>Educate developers:</strong> Teach teams to check licenses before adding dependencies</li>
+    <li><strong>Document exceptions:</strong> If you must use a restricted license, document why and get legal approval</li>
+    <li><strong>Update regularly:</strong> Re-generate SBOMs with each release to catch transitive dependency changes</li>
+  </ol>
+
+  <h2>Industry-Specific Guidelines</h2>
+
+  <h3>Healthcare (HIPAA, FDA)</h3>
+  <ul>
+    <li>FDA requires SBOMs for medical devices (Cybersecurity in Medical Devices guidance)</li>
+    <li>Focus on vulnerability tracking and patching timelines</li>
+    <li>Prefer SPDX for regulatory submissions (ISO standard)</li>
+  </ul>
+
+  <h3>Financial Services (PCI-DSS, SOX)</h3>
+  <ul>
+    <li>PCI-DSS 4.0 emphasizes supply chain security</li>
+    <li>SBOMs help demonstrate compliance with third-party risk management</li>
+    <li>Focus on GPL/AGPL avoidance to protect proprietary trading algorithms</li>
+  </ul>
+
+  <h3>Government Contracting</h3>
+  <ul>
+    <li>Federal contracts increasingly require NTIA-compliant SBOMs</li>
+    <li>Use CycloneDX or SPDX (agencies accept both)</li>
+    <li>Provide SBOMs at contract award and with each software update</li>
+  </ul>
+
+  <h2>Related Guides</h2>
+  <ul>
+    <li><a href="./how-to-generate-sbom.html">How to Generate an SBOM (Docker, npm, Maven, etc.)</a></li>
+    <li><a href="./cyclonedx-vs-spdx.html">CycloneDX vs SPDX: Which Format Should I Use?</a></li>
+  </ul>
+
+  <div class="footer">
+    <p><a href="./">Try the SBOM Diff Tool</a> | <a href="https://github.com/rozetyp/sbom-diff" target="_blank" rel="noopener noreferrer">View on GitHub</a></p>
+  </div>
+</body>
+</html>
