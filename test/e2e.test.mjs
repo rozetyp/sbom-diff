@@ -95,7 +95,7 @@ test('a non-SBOM file is rejected and clears that side', async () => {
 test('policy presets and custom list', async () => {
   await upload('A', 'cdx-fail.json');
   await page.check('#policyToggle');
-  assert.match(await text('#policyRules'), /Forbids: GPL-\*, AGPL-\*\. Checking cdx-fail\.json\./);
+  assert.match(await text('#policyRules'), /Forbids GPL-\*, AGPL-\*\. Checking cdx-fail\.json\./);
   assert.match(await text('#policyResult'), /FAIL[\s\S]*Violations \(2\)/);
   await page.selectOption('#policyPreset', 'Permissive Only');
   assert.match(await text('#policyResult'), /Violations \(4\)/);

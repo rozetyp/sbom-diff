@@ -36,6 +36,7 @@ function showError(message: string): void {
   const el = $('#error');
   el.textContent = message;
   el.style.display = 'block';
+  el.scrollIntoView({ block: 'nearest' });
 }
 
 function clearError(): void {
@@ -67,9 +68,15 @@ function recompute(): void {
   renderPolicy();
 }
 
+function zoneText(side: Side): string {
+  return loaded[side] ? 'Drop or click to replace this file' : `Drop SBOM ${side} (JSON) or click to select`;
+}
+
 function setLoaded(side: Side, sbom: LoadedSBOM | null): void {
   loaded[side] = sbom;
-  document.getElementById(`drop${side}`)!.classList.toggle('has-file', !!sbom);
+  const zone = document.getElementById(`drop${side}`)!;
+  zone.classList.toggle('has-file', !!sbom);
+  zone.querySelector('.drop-zone-text')!.textContent = zoneText(side);
   recompute();
 }
 
@@ -85,108 +92,99 @@ function renderSummary(side: Side): void {
     return;
   }
   const { summary } = sbom;
-  const top = summary.topLicenses[0]?.license || '—';
-  el.innerHTML = `
-    <div class="summary-card">
-      <h2 style="margin:0 0 var(--space-sm);font-size:1.125rem;font-weight:600;overflow-wrap:anywhere">${escapeHtml(sbom.fileName)}</h2>
-      <div class="summary-stats">
-        <div class="stat">
-          <span class="stat-value">${summary.totalComponents}</span>
-          <span class="stat-label">Components</span>
-        </div>
-        <div class="stat">
-          <span class="stat-value">${summary.unknownLicenses}</span>
-          <span class="stat-label">Unknown Licenses</span>
-        </div>
-        <div class="stat">
-          <span class="stat-value" style="overflow-wrap:anywhere">${escapeHtml(top)}</span>
-          <span class="stat-label">Top License</span>
-        </div>
-      </div>
-    </div>
-  `;
+  const parts = [`${summary.totalComponents} ${summary.totalComponents === 1 ? 'component' : 'components'}`];
+  if (summary.unknownLicenses) parts.push(`${summary.unknownLicenses} without a license`);
+  const top = summary.topLicenses[0];
+  if (top) parts.push(`most common license ${escapeHtml(top.license)}`);
+  el.innerHTML = `<b>${escapeHtml(sbom.fileName)}</b> · ${parts.join(' · ')}`;
 }
 
-const EMPTY_LIST = '<div style="text-align:center;padding:var(--space-3xl);color:var(--color-gray-400)">None</div>';
-
-function moreRow(total: number): string {
-  return total > MAX_LIST_ITEMS ? `<div class="component-item">... and ${total - MAX_LIST_ITEMS} more (all included in Export JSON)</div>` : '';
+function table(head: string[], rows: string[], total: number, emptyText: string): string {
+  const cols = head.length;
+  const body = rows.length
+    ? rows.join('') +
+      (total > MAX_LIST_ITEMS
+        ? `<tr class="more"><td colspan="${cols}">${total - MAX_LIST_ITEMS} more not shown. Export JSON has the full list.</td></tr>`
+        : '')
+    : `<tr class="empty"><td colspan="${cols}">${emptyText}</td></tr>`;
+  return `<table class="data"><thead><tr>${head.map((h) => `<th scope="col">${h}</th>`).join('')}</tr></thead><tbody>${body}</tbody></table>`;
 }
 
-function renderList(containerId: string, items: NormalizedComponent[], itemType: 'added' | 'removed'): void {
-  const el = document.getElementById(containerId)!;
-  if (!items.length) {
-    el.innerHTML = EMPTY_LIST;
-    return;
-  }
+function renderList(containerId: string, items: NormalizedComponent[], kind: 'added' | 'removed'): void {
+  const sign = kind === 'added' ? '+' : '−';
   const sorted = [...items].sort(byNameVersion);
-  el.innerHTML =
-    sorted
-      .slice(0, MAX_LIST_ITEMS)
-      .map(
-        (c) => `
-    <div class="component-item ${itemType}">
-      <div class="component-name">${escapeHtml(c.name)}</div>
-      <div class="component-version">${escapeHtml(c.version)}</div>
-      <div style="font-size:.8125rem;color:var(--color-text-secondary)">${escapeHtml(c.licenseExpression || 'Unknown license')}</div>
-    </div>`
-      )
-      .join('') + moreRow(sorted.length);
+  const rows = sorted.slice(0, MAX_LIST_ITEMS).map(
+    (c) => `<tr class="${kind}">
+      <td class="sign" aria-hidden="true">${sign}</td>
+      <td class="mono">${escapeHtml(c.name)}</td>
+      <td class="mono">${escapeHtml(c.version)}</td>
+      <td class="mono">${escapeHtml(c.licenseExpression || 'unknown')}</td>
+    </tr>`
+  );
+  document.getElementById(containerId)!.innerHTML = table(
+    ['<span class="visually-hidden">Change</span>', 'Component', 'Version', 'License'],
+    rows,
+    sorted.length,
+    `Nothing ${kind}.`
+  );
 }
 
 function renderChangedList(containerId: string, changes: DiffChange[]): void {
-  const el = document.getElementById(containerId)!;
-  if (!changes.length) {
-    el.innerHTML = EMPTY_LIST;
-    return;
-  }
   const sorted = [...changes].sort((a, b) => byNameVersion(a.to, b.to));
-  const detail = (label: string, from: string, to: string) =>
-    `<div style="font-size:.8125rem;color:var(--color-text-secondary)">${label}: ${escapeHtml(from)} → ${escapeHtml(to)}</div>`;
-  el.innerHTML =
-    sorted
-      .slice(0, MAX_LIST_ITEMS)
-      .map((ch) => {
-        const version = ch.fields.includes('version')
-          ? `${escapeHtml(ch.from.version)} → ${escapeHtml(ch.to.version)}`
-          : escapeHtml(ch.to.version);
-        return `
-    <div class="component-item changed">
-      <div class="component-name">${escapeHtml(ch.to.name)}</div>
-      <div class="component-version">${version}</div>
-      ${ch.fields.includes('licenses') ? detail('Licenses', ch.from.licenseExpression || 'Unknown', ch.to.licenseExpression || 'Unknown') : ''}
-      ${ch.fields.includes('supplier') ? detail('Supplier', ch.from.supplier || '', ch.to.supplier || '') : ''}
-    </div>`;
-      })
-      .join('') + moreRow(sorted.length);
+  const arrow = '<span class="arrow">→</span>';
+  const anyNotes = sorted.some((ch) => ch.fields.includes('licenses') || ch.fields.includes('supplier'));
+  const rows = sorted.slice(0, MAX_LIST_ITEMS).map((ch) => {
+    const version = ch.fields.includes('version')
+      ? `${escapeHtml(ch.from.version)} ${arrow} ${escapeHtml(ch.to.version)}`
+      : escapeHtml(ch.to.version);
+    const notes: string[] = [];
+    if (ch.fields.includes('licenses')) {
+      notes.push(`license ${escapeHtml(ch.from.licenseExpression || 'unknown')} ${arrow} ${escapeHtml(ch.to.licenseExpression || 'unknown')}`);
+    }
+    if (ch.fields.includes('supplier')) {
+      notes.push(`supplier ${escapeHtml(ch.from.supplier || '')} ${arrow} ${escapeHtml(ch.to.supplier || '')}`);
+    }
+    return `<tr class="changed">
+      <td class="sign" aria-hidden="true">~</td>
+      <td class="mono">${escapeHtml(ch.to.name)}</td>
+      <td class="mono">${version}</td>
+      ${anyNotes ? `<td class="mono note">${notes.join('<br>')}</td>` : ''}
+    </tr>`;
+  });
+  const head = ['<span class="visually-hidden">Change</span>', 'Component', 'Version'];
+  if (anyNotes) head.push('Also changed');
+  document.getElementById(containerId)!.innerHTML = table(
+    head,
+    rows,
+    sorted.length,
+    'Nothing changed.'
+  );
 }
 
 function renderDiff(): void {
   const hasDiff = !!diffResult;
   const anyLoaded = !!(loaded.A || loaded.B);
-  $('#diffSection').style.display = hasDiff ? '' : 'none';
-  $('#exportSection').style.display = hasDiff ? '' : 'none';
-  $('#policySection').style.display = anyLoaded ? '' : 'none';
-  $('#inlineHint').style.display = !hasDiff && anyLoaded ? '' : 'none';
+  $('#diffSection').hidden = !hasDiff;
+  $('#exportSection').hidden = !hasDiff;
+  $('#policySection').hidden = !anyLoaded;
+  $('#inlineHint').hidden = hasDiff || !anyLoaded;
   if (!diffResult) return;
 
-  const counts = { Added: diffResult.added.length, Removed: diffResult.removed.length, Changed: diffResult.changed.length };
-  for (const [label, n] of Object.entries(counts)) {
-    $(`#${label.toLowerCase()}Count`).textContent = String(n);
-    $(`#badge${label}`).textContent = String(n);
-  }
+  $('#addedCount').textContent = String(diffResult.added.length);
+  $('#removedCount').textContent = String(diffResult.removed.length);
+  $('#changedCount').textContent = String(diffResult.changed.length);
   renderList('listAdded', diffResult.added, 'added');
   renderList('listRemoved', diffResult.removed, 'removed');
   renderChangedList('listChanged', diffResult.changed);
 }
 
 function renderPolicy(): void {
-  $('#policyControls').style.display = policyEnabled ? '' : 'none';
-  $('#policyCustomWrap').style.display = policyPreset === 'Custom' ? 'block' : 'none';
+  $('#policyControls').hidden = !policyEnabled;
+  $('#policyCustomWrap').hidden = policyPreset !== 'Custom';
   const target = policyTarget();
   const forbidden = forbiddenList();
   $('#policyRules').textContent = policyEnabled
-    ? `Forbids: ${forbidden.join(', ') || 'nothing yet'}${target ? `. Checking ${target.fileName}.` : '. Load an SBOM to check it.'}`
+    ? `Forbids ${forbidden.join(', ') || 'nothing yet'}.${target ? ` Checking ${target.fileName}.` : ' Load an SBOM to check it.'}`
     : '';
 
   const container = $('#policyResult');
@@ -195,36 +193,21 @@ function renderPolicy(): void {
     return;
   }
   const { pass, violations } = policyResult;
+  if (pass) {
+    container.innerHTML = `<div class="verdict pass"><strong>PASS</strong><span>No component needs a forbidden license.</span></div>`;
+    return;
+  }
   const sorted = [...violations].sort(byNameVersion);
-  const cell = 'padding:var(--space-md);border-bottom:1px solid var(--color-gray-200)';
-  const head = `text-align:left;${cell};background:var(--color-gray-50);font-weight:600`;
+  const rows = sorted.slice(0, MAX_LIST_ITEMS).map(
+    (v) => `<tr>
+      <td class="mono">${escapeHtml(v.name)}</td>
+      <td class="mono">${escapeHtml(v.version)}</td>
+      <td class="mono">${escapeHtml(v.expression)}</td>
+    </tr>`
+  );
   container.innerHTML = `
-    <div class="policy-result ${pass ? 'pass' : 'fail'}">
-      <div class="policy-badge">${pass ? '✓ PASS' : '✗ FAIL'}</div>
-      ${
-        pass
-          ? ''
-          : `<div style="overflow-x:auto">
-          <h3 style="font-size:1rem;font-weight:600;color:#991b1b;margin-bottom:var(--space-lg)">Violations (${violations.length})</h3>
-          <table style="width:100%;border-collapse:collapse;font-size:.875rem">
-            <thead><tr><th style="${head}">Component</th><th style="${head}">Version</th><th style="${head}">License</th></tr></thead>
-            <tbody>
-              ${sorted
-                .slice(0, MAX_LIST_ITEMS)
-                .map(
-                  (v) => `<tr>
-                <td style="${cell}">${escapeHtml(v.name)}</td>
-                <td style="${cell}">${escapeHtml(v.version)}</td>
-                <td style="${cell};font-family:ui-monospace,'Cascadia Code','Courier New',monospace;font-weight:600;color:var(--color-danger)">${escapeHtml(v.expression)}</td>
-              </tr>`
-                )
-                .join('')}
-            </tbody>
-          </table>
-          ${violations.length > MAX_LIST_ITEMS ? `<p style="text-align:center;margin-top:var(--space-md);color:var(--color-text-secondary)">... and ${violations.length - MAX_LIST_ITEMS} more</p>` : ''}
-        </div>`
-      }
-    </div>`;
+    <div class="verdict fail"><strong>FAIL</strong><span>Violations (${violations.length}): ${violations.length === 1 ? 'this component needs' : 'these components need'} a forbidden license.</span></div>
+    <div class="table-wrap">${table(['Component', 'Version', 'License'], rows, sorted.length, '')}</div>`;
 }
 
 // ============================================================================
@@ -234,7 +217,7 @@ function renderPolicy(): void {
 function setLoading(side: Side, loading: boolean): void {
   const text = document.getElementById(`drop${side}`)!.querySelector('.drop-zone-text')!;
   if (loading) text.innerHTML = '<span class="loading"></span> Loading...';
-  else text.textContent = `Drop SBOM ${side} (JSON) or click to select`;
+  else text.textContent = zoneText(side);
 }
 
 function loadText(text: string, fileName: string, side: Side): void {
@@ -325,9 +308,10 @@ function initTabs(): void {
       document.querySelectorAll('.diff-tab').forEach((b) => b.classList.remove('active'));
       btn.classList.add('active');
       const tab = btn.getAttribute('data-tab');
-      $('#listAdded').style.display = tab === 'added' ? '' : 'none';
-      $('#listRemoved').style.display = tab === 'removed' ? '' : 'none';
-      $('#listChanged').style.display = tab === 'changed' ? '' : 'none';
+      $('#listAdded').hidden = tab !== 'added';
+      $('#listRemoved').hidden = tab !== 'removed';
+      $('#listChanged').hidden = tab !== 'changed';
+      document.querySelectorAll('.diff-tab').forEach((b) => b.setAttribute('aria-selected', String(b === btn)));
     });
   });
 }

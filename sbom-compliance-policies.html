@@ -2,42 +2,31 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>SBOM Compliance & License Policies Explained - NTIA, CISA, GPL, AGPL</title>
   <meta name="description" content="Complete guide to SBOM compliance requirements, license policies (GPL, AGPL, SSPL), NTIA minimum elements, CISA guidelines, and how to implement license checks in your supply chain.">
   <link rel="canonical" href="https://rozetyp.github.io/sbom-diff/sbom-compliance-policies.html">
-  <style>
-    body {
-      font-family: ui-sans-serif, system-ui, sans-serif;
-      line-height: 1.7;
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 2rem;
-      color: #1f2937;
-    }
-    h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 0.5rem; }
-    h2 { font-size: 1.75rem; font-weight: 700; margin-top: 2.5rem; border-bottom: 2px solid #e5e7eb; padding-bottom: 0.5rem; }
-    h3 { font-size: 1.25rem; font-weight: 600; margin-top: 1.5rem; }
-    code { background: #f3f4f6; padding: 0.125rem 0.375rem; border-radius: 0.25rem; font-size: 0.9em; }
-    table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
-    th, td { border: 1px solid #d1d5db; padding: 0.75rem; text-align: left; }
-    th { background: #f3f4f6; font-weight: 600; }
-    a { color: #3b82f6; text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    .nav { background: #3b82f6; color: white; padding: 1rem; margin: -2rem -2rem 2rem; text-align: center; }
-    .nav a { color: white; font-weight: 600; }
-    .footer { margin-top: 4rem; padding-top: 2rem; border-top: 1px solid #e5e7eb; text-align: center; color: #6b7280; }
-    .warning { background: #fef3c7; border-left: 4px solid #ca8a04; padding: 1rem; margin: 1rem 0; }
-    .info { background: #dbeafe; border-left: 4px solid #3b82f6; padding: 1rem; margin: 1rem 0; }
-  </style>
+  <meta name="color-scheme" content="light dark">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none';">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%23272a30'/%3E%3Cpath d='M9 11h8M13 7v8M15 22h8' stroke='%23f7f5f0' stroke-width='3' stroke-linecap='square'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="nav">
-    <a href="./">← Back to SBOM Diff Tool</a>
-  </div>
+  <header class="bar">
+    <div class="wrap">
+      <a class="wordmark" href="./">sbom-diff</a>
+      <nav aria-label="Site">
+        <a href="./">Compare SBOMs</a>
+        <a href="https://github.com/rozetyp/sbom-diff">Source</a>
+      </nav>
+    </div>
+  </header>
 
-  <h1>SBOM Compliance & License Policies Explained</h1>
-  <p><strong>Last updated:</strong> November 2026</p>
+  <main class="wrap">
+    <article class="doc">
+
+      <h1>SBOM Compliance & License Policies Explained</h1>
+  <p class="updated">Last updated November 2026</p>
 
   <p>Software Bills of Materials (SBOMs) are increasingly required for compliance, supply chain security, and license management. This guide covers regulatory requirements, common license policies, and how to implement automated checks.</p>
 
@@ -53,7 +42,7 @@
 
   <h3>2. NTIA Minimum Elements (2021)</h3>
   <p>The National Telecommunications and Information Administration (NTIA) defined seven minimum required fields for SBOMs:</p>
-  <table>
+  <div class="table-wrap"><table>
     <thead>
       <tr>
         <th>Field</th>
@@ -106,9 +95,9 @@
         <td><code>supplier</code></td>
       </tr>
     </tbody>
-  </table>
+  </table></div>
 
-  <div class="info">
+  <div class="note">
     <strong>Note:</strong> Both CycloneDX and SPDX can carry all NTIA minimum elements, but generators do not always fill them in. Check that supplier, version and unique identifiers (purls) are actually populated.
   </div>
 
@@ -143,8 +132,8 @@
     <li><code>GPL-2.0-or-later</code> - Allows upgrading to GPL-3.0</li>
   </ul>
 
-  <div class="warning">
-    <strong>⚠️ Common Misconception:</strong> Using GPL libraries in a microservice or container <em>may</em> still trigger copyleft obligations if the service is distributed to customers. Consult legal counsel for your specific use case.
+  <div class="note">
+    <strong>Common misconception:</strong> Using GPL libraries in a microservice or container <em>may</em> still trigger copyleft obligations if the service is distributed to customers. Consult legal counsel for your specific use case.
   </div>
 
   <h3>2. No AGPL Policy</h3>
@@ -189,7 +178,7 @@ jobs:
       - name: Check for GPL
         run: |
           if grep -q "GPL-" sbom.json; then
-            echo "❌ GPL license detected!"
+            echo "GPL license detected"
             exit 1
           fi</code></pre>
 
@@ -271,9 +260,15 @@ jobs:
     <li><a href="./how-to-generate-sbom.html">How to Generate an SBOM (Docker, npm, Maven, etc.)</a></li>
     <li><a href="./cyclonedx-vs-spdx.html">CycloneDX vs SPDX: Which Format Should I Use?</a></li>
   </ul>
+    </article>
+  </main>
 
-  <div class="footer">
-    <p><a href="./">Try the SBOM Diff Tool</a> | <a href="https://github.com/rozetyp/sbom-diff" target="_blank" rel="noopener noreferrer">View on GitHub</a></p>
-  </div>
+  <footer class="foot">
+    <div class="wrap">
+      <span>SBOM Diff · MIT licensed</span>
+      <a href="./">Compare two SBOMs</a>
+      <a href="https://github.com/rozetyp/sbom-diff">Source on GitHub</a>
+    </div>
+  </footer>
 </body>
 </html>

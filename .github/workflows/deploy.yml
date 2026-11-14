@@ -31,8 +31,8 @@ jobs:
       - name: Assemble site
         run: |
           mkdir -p dist
-          cp index.html core.js app.js *.html robots.txt sitemap.xml dist/
-          cp -r samples dist/
+          cp index.html style.css core.js app.js *.html robots.txt sitemap.xml dist/
+          cp -r samples fonts dist/
 
       - uses: actions/upload-pages-artifact@v3
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'

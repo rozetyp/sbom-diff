@@ -46,12 +46,14 @@ npm run test:all   # both, as CI runs them
 |---|---|
 | `core.ts` | Format detection, normalization, license expression parsing, diff, policy, reports. No DOM. |
 | `app.ts` | The page: file loading, rendering, export. |
-| `index.html` | Markup and styles; loads `core.js` then `app.js`. |
+| `index.html` | The page; loads `style.css`, `core.js`, `app.js`. |
+| `style.css` | All styling, shared by the page and the guides. Light and dark follow the system setting. |
+| `fonts/` | IBM Plex Sans and Mono, self-hosted (SIL Open Font License, see `fonts/OFL.txt`). |
 | `*-*.html` | Guides: generating SBOMs, CycloneDX vs SPDX, license policies. |
 | `samples/` | Example SBOMs behind the "Load samples" buttons. |
 | `test/` | Logic and browser tests, fixtures, expected results. |
 
-There is no framework, bundler or runtime dependency. GitHub Actions runs the tests on every push and pull request, and deploys `main` to GitHub Pages when they pass.
+There is no framework, bundler, CDN or runtime dependency; the page loads nothing from other sites. GitHub Actions runs the tests on every push and pull request, and deploys `main` to GitHub Pages when they pass.
 
 ## License
 
